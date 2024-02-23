@@ -1,13 +1,20 @@
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('calculateButton').addEventListener('click', calculatePallet);
     document.getElementById('resetButton').addEventListener('click', resetForm);
+    document.getElementById('weightLimit').addEventListener('change', toggleWeightLimitDetails);
     document.getElementById('numSKUs').addEventListener('input', updateSKUDetails);
 });
+
+function toggleWeightLimitDetails() {
+    const weightLimit = document.getElementById('weightLimit').value;
+    const details = document.getElementById('weightLimitDetails');
+    details.style.display = weightLimit === 'yes' ? 'block' : 'none';
+}
 
 function updateSKUDetails() {
     const numSKUs = parseInt(document.getElementById('numSKUs').value) || 0;
     const skuDetails = document.getElementById('skuDetails');
-    skuDetails.innerHTML = ''; // Clear previous entries
+    skuDetails.innerHTML = '';
     for (let i = 1; i <= numSKUs; i++) {
         skuDetails.innerHTML += `
             <div class="sku-group">
@@ -26,25 +33,24 @@ function updateSKUDetails() {
 
 function calculatePallet() {
     const palletConfig = document.getElementById('palletConfig').value;
-    const numSKUs = parseInt(document.getElementById('numSKUs').value) || 0;
     let palletsNeeded = 0;
+    let totalVolume = 0;
+    const numSKUs = parseInt(document.getElementById('numSKUs').value) || 0;
+    const palletVolume = (parseInt(document.getElementById('palletLength').value) || 0) *
+                         (parseInt(document.getElementById('palletWidth').value) || 0) *
+                         (parseInt(document.getElementById('palletHeight').value) || 0);
+
+    for (let i = 1; i <= numSKUs; i++) {
+        const length = parseInt(document.getElementById(`length${i}`).value) || 0;
+        const width = parseInt(document.getElementById(`width${i}`).value) || 0;
+        const height = parseInt(document.getElementById(`height${i}`).value) || 0;
+        const qty = parseInt(document.getElementById(`qty${i}`).value) || 0;
+        totalVolume += (length * width * height) * qty;
+    }
 
     if (palletConfig === 'singleSKU') {
         palletsNeeded = numSKUs;
     } else {
-        let totalVolume = 0;
-        const palletVolume = (parseInt(document.getElementById('palletLength').value) || 0) *
-                             (parseInt(document.getElementById('palletWidth').value) || 0) *
-                             (parseInt(document.getElementById('palletHeight').value) || 0);
-
-        for (let i = 1; i <= numSKUs; i++) {
-            const length = parseInt(document.getElementById(`length${i}`).value) || 0;
-            const width = parseInt(document.getElementById(`width${i}`).value) || 0;
-            const height = parseInt(document.getElementById(`height${i}`).value) || 0;
-            const qty = parseInt(document.getElementById(`qty${i}`).value) || 0;
-            totalVolume += (length * width * height) * qty;
-        }
-
         palletsNeeded = palletVolume > 0 ? Math.ceil(totalVolume / palletVolume) : 0;
     }
 
@@ -54,6 +60,7 @@ function calculatePallet() {
 function resetForm() {
     document.getElementById('palletConfig').value = 'singleSKU';
     document.getElementById('weightLimit').value = 'no';
+    toggleWeightLimitDetails(); // Ensure this is called to hide the weight details if needed
     document.getElementById('numSKUs').value = '';
     document.getElementById('skuDetails').innerHTML = '';
     document.getElementById('palletLength').value = '';
