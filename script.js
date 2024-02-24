@@ -1,91 +1,77 @@
-// Function to toggle weight limit details based on user selection
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('calculateButton').addEventListener('click', calculatePallet);
+    document.getElementById('resetButton').addEventListener('click', resetForm);
+    document.getElementById('weightLimit').addEventListener('change', toggleWeightLimitDetails);
+    document.getElementById('numSKUs').addEventListener('input', updateSKUDetails);
+});
+
 function toggleWeightLimitDetails() {
-  const weightLimit = document.getElementById('weightLimit').value;
-  const weightLimitDetails = document.getElementById('weightLimitDetails');
-  weightLimitDetails.style.display = weightLimit === 'yes' ? 'block' : 'none';
+    const weightLimit = document.getElementById('weightLimit').value;
+    const details = document.getElementById('weightLimitDetails');
+    details.style.display = weightLimit === 'yes' ? 'block' : 'none';
 }
 
-// Function to dynamically add SKU details input fields based on the number of SKUs entered
 function updateSKUDetails() {
-  const numSKUs = document.getElementById('numSKUs').value;
-  const skuDetails = document.getElementById('skuDetails');
-  skuDetails.innerHTML = ''; // Clear existing SKU details
-
-  for (let i = 1; i <= numSKUs; i++) {
-    const html = `
-      <div class="skuDetail" id="skuDetail${i}">
-        <h4>SKU ${i} Details:</h4>
-        <label for="sku${i}Quantity">Quantity:</label>
-        <input type="number" id="sku${i}Quantity" placeholder="Quantity">
-        <label for="sku${i}Length">Length (inches):</label>
-        <input type="number" id="sku${i}Length" placeholder="Length">
-        <label for="sku${i}Width">Width (inches):</label>
-        <input type="number" id="sku${i}Width" placeholder="Width">
-        <label for="sku${i}Height">Height (inches):</label>
-        <input type="number" id="sku${i}Height" placeholder="Height">
-        <label for="sku${i}Weight">Weight:</label>
-        <input type="number" id="sku${i}Weight" placeholder="Weight">
-      </div>
-    `;
-    skuDetails.innerHTML += html;
-  }
+    const numSKUs = parseInt(document.getElementById('numSKUs').value) || 0;
+    const skuDetails = document.getElementById('skuDetails');
+    skuDetails.innerHTML = ''; // Clear previous entries
+    for (let i = 1; i <= numSKUs; i++) {
+        skuDetails.innerHTML += `
+            <div class="sku-group">
+                <label>SKU ${i} Length (in):</label>
+                <input type="number" id="length${i}" placeholder="Length">
+                <label>SKU ${i} Width (in):</label>
+                <input type="number" id="width${i}" placeholder="Width">
+                <label>SKU ${i} Height (in):</label>
+                <input type="number" id="height${i}" placeholder="Height">
+                <label>SKU ${i} Qty of Cartons:</label>
+                <input type="number" id="qty${i}" placeholder="Qty of Cartons">
+            </div>
+        `;
+    }
 }
 
-// Function to calculate the number of pallets required
 function calculatePallet() {
-  const numSKUs = parseInt(document.getElementById('numSKUs').value, 10);
-  const palletConfig = document.getElementById('palletConfig').value;
-  const palletLength = parseFloat(document.getElementById('palletLength').value);
-  const palletWidth = parseFloat(document.getElementById('palletWidth').value);
-  const palletHeight = parseFloat(document.getElementById('palletHeight').value);
-  const weightLimit = document.getElementById('weightLimit').value === 'yes';
-  const maxWeight = weightLimit ? parseFloat(document.getElementById('maxWeight').value) : Infinity;
-  const weightUnit = document.getElementById('weightUnit').value;
+    const palletConfig = document.getElementById('palletConfig').value;
+    let palletsNeeded = 0;
+    const palletVolume = (parseInt(document.getElementById('palletLength').value) || 0) *
+                         (parseInt(document.getElementById('palletWidth').value) || 0) *
+                         (parseInt(document.getElementById('palletHeight').value) || 0);
 
-  let totalPallets = 0;
-  let totalWeight = 0;
+    if (palletConfig === 'singleSKU') {
+        const numSKUs = parseInt(document.getElementById('numSKUs').value) || 0;
+        for (let i = 1; i <= numSKUs; i++) {
+            const length = parseInt(document.getElementById(`length${i}`).value) || 0;
+            const width = parseInt(document.getElementById(`width${i}`).value) || 0;
+            const height = parseInt(document.getElementById(`height${i}`).value) || 0;
+            const qty = parseInt(document.getElementById(`qty${i}`).value) || 0;
+            const totalVolume = (length * width * height) * qty;
+            palletsNeeded += Math.ceil(totalVolume / palletVolume);
+        }
+    } else { // Multiple SKUs per pallet
+        let totalVolume = 0;
+        const numSKUs = parseInt(document.getElementById('numSKUs').value) || 0;
+        for (let i = 1; i <= numSKUs; i++) {
+            const length = parseInt(document.getElementById(`length${i}`).value) || 0;
+            const width = parseInt(document.getElementById(`width${i}`).value) || 0;
+            const height = parseInt(document.getElementById(`height${i}`).value) || 0;
+            const qty = parseInt(document.getElementById(`qty${i}`).value) || 0;
+            totalVolume += (length * width * height) * qty;
+        }
+        palletsNeeded = Math.ceil(totalVolume / palletVolume);
+    }
 
-  // Loop through each SKU to calculate pallet requirements
-  for (let i = 1; i <= numSKUs; i++) {
-    const quantity = parseInt(document.getElementById(`sku${i}Quantity`).value, 10);
-    const length = parseFloat(document.getElementById(`sku${i}Length`).value);
-    const width = parseFloat(document.getElementById(`sku${i}Width`).value);
-    const height = parseFloat(document.getElementById(`sku${i}Height`).value);
-    const weight = parseFloat(document.getElementById(`sku${i}Weight`).value);
-
-    // Calculate how many cartons fit in a single layer on the pallet
-    const perLayer = Math.floor(palletLength / length) * Math.floor(palletWidth / width);
-    // Calculate the number of layers needed
-    const layers = Math.ceil(quantity / perLayer);
-    // Calculate the total height of the cartons
-    const totalHeight = layers * height;
-    // Calculate how many pallets are needed based on height
-    const palletsNeeded = Math.ceil(totalHeight / palletHeight);
-    // Calculate weight requirement
-    const totalSKUWeight = quantity * weight;
-    const weightPalletsNeeded = Math.ceil(totalSKUWeight / maxWeight);
-
-    totalPallets += Math.max(palletsNeeded, weightPalletsNeeded);
-    totalWeight += totalSKUWeight;
-  }
-
-  // Display the results
-  const results = document.getElementById('results');
-  results.innerHTML = `<p>Total Pallets Required: ${totalPallets}</p>`;
-  results.innerHTML += `<p>Total Weight: ${totalWeight} ${weightUnit}</p>`;
-  if (weightLimit) {
-    results.innerHTML += `<p>Weight Limit per Pallet: ${maxWeight} ${weightUnit}</p>`;
-  }
+    document.getElementById('results').innerHTML = `Number of Pallets Required: ${palletsNeeded}`;
 }
 
-// Function to reset the form, clearing all inputs and results
 function resetForm() {
-  document.getElementById('weightLimit').value = 'no';
-  toggleWeightLimitDetails();
-  document.getElementById('numSKUs').value = '';
-  document.getElementById('skuDetails').innerHTML = '';
-  document.getElementById('results').innerHTML = '';
+    document.getElementById('palletConfig').value = 'singleSKU';
+    document.getElementById('weightLimit').value = 'no';
+    toggleWeightLimitDetails();
+    document.getElementById('numSKUs').value = '';
+    document.getElementById('skuDetails').innerHTML = '';
+    document.getElementById('palletLength').value = '';
+    document.getElementById('palletWidth').value = '';
+    document.getElementById('palletHeight').value = '';
+    document.getElementById('results').innerHTML = '';
 }
-
-// Initially setup or reset form details
-resetForm();
