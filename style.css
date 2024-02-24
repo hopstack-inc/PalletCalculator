@@ -1,13 +1,13 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f5f5f5; /* Light grey background */
+  background-color: #f5f5f5;
   padding: 20px;
 }
 
 .container {
   max-width: 600px;
   margin: auto;
-  background: white; /* White form background */
+  background: white;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -20,7 +20,7 @@ body {
 .form-group label {
   display: block;
   margin-bottom: 5px;
-  color: #234E73; /* Dark blue for text */
+  color: #234E73;
 }
 
 input[type="number"], select {
@@ -32,7 +32,7 @@ input[type="number"], select {
   box-sizing: border-box;
 }
 
-button {
+button, .fa-sync-alt {
   width: 48%;
   padding: 10px;
   color: white;
@@ -44,20 +44,25 @@ button {
 }
 
 #calculateButton {
-  background-color: #E15718; /* Orange for the Calculate button */
+  background-color: #E15718;
 }
 
-#resetButton {
-  background-color: #f44336; /* Red for the Refresh button */
+.fa-sync-alt {
+  color: #f44336;
+  background: none;
+  padding: 0;
+  font-size: 24px;
+  margin: 0;
+  float: right;
 }
 
-button:hover {
+.fa-sync-alt:hover {
   opacity: 0.9;
 }
 
 h2, .credit {
   text-align: center;
-  color: #234E73; /* Dark blue for headings and credit */
+  color: #234E73;
 }
 
 #results {
@@ -71,5 +76,5 @@ h2, .credit {
 .credit {
   margin-top: 40px;
   font-size: 0.8em;
-  color: #E15718; /* Orange for the credit text */
+  color: #E15718;
 }
