@@ -1,13 +1,13 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f5f5f5;
+  background-color: #f5f5f5; /* Light grey background */
   padding: 20px;
 }
 
 .container {
   max-width: 600px;
   margin: auto;
-  background: white;
+  background: white; /* White form background */
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -20,7 +20,7 @@ body {
 .form-group label {
   display: block;
   margin-bottom: 5px;
-  color: #234E73;
+  color: #234E73; /* Dark blue for text */
 }
 
 input[type="number"], select {
@@ -29,32 +29,47 @@ input[type="number"], select {
   margin-top: 5px;
   border-radius: 4px;
   border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
-button, .fas {
-  background-color: #007BFF;
+button {
+  width: 48%;
+  padding: 10px;
   color: white;
-  padding: 10px 15px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 16px;
   margin-top: 10px;
 }
 
-button:hover, .fas:hover {
-  background-color: #0056b3;
+#calculateButton {
+  background-color: #E15718; /* Orange for the Calculate button */
 }
 
-#resetIcon {
-  margin-left: 10px;
-  font-size: 20px;
-  vertical-align: middle;
-  display: inline-block;
+#resetButton {
+  background-color: #f44336; /* Red for the Refresh button */
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+h2, .credit {
+  text-align: center;
+  color: #234E73; /* Dark blue for headings and credit */
+}
+
+#results {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  color: #333;
 }
 
 .credit {
-  text-align: center;
   margin-top: 40px;
   font-size: 0.8em;
-  color: #666;
+  color: #E15718; /* Orange for the credit text */
 }
