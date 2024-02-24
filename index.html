@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pallet Calculator by Hopstack - Made by Sneha</title>
+    <title>Pallet Calculator by Hopstack</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 </head>
@@ -29,7 +29,7 @@
     </div>
 
     <div id="weightLimitDetails" class="form-group" style="display: none;">
-        <label for="maxWeight">Max Weight per Pallet:</label>
+        <label for="maxWeight">Max Weight per Pallet (lbs or kg):</label>
         <input type="number" id="maxWeight" placeholder="Max Weight">
         <label for="weightUnit">Weight Unit:</label>
         <select id="weightUnit">
@@ -46,17 +46,17 @@
     <div id="skuDetails"></div>
 
     <div class="form-group">
-        <h4>Pallet Base Dimensions</h4>
-        <label for="palletLength">Length (inches):</label>
+        <h4>Pallet Base Dimensions:</h4>
+        <label for="palletLength">Length (in):</label>
         <input type="number" id="palletLength" placeholder="Length">
-        <label for="palletWidth">Width (inches):</label>
+        <label for="palletWidth">Width (in):</label>
         <input type="number" id="palletWidth" placeholder="Width">
-        <label for="palletHeight">Max Height (inches):</label>
+        <label for="palletHeight">Max Height (in):</label>
         <input type="number" id="palletHeight" placeholder="Max Height">
     </div>
 
     <button id="calculateButton" onclick="calculatePallet()">Calculate</button>
-    <i id="resetIcon" class="fas fa-sync-alt" onclick="resetForm()" style="cursor:pointer; color:#f44336; font-size:24px;"></i>
+    <i id="resetIcon" class="fas fa-sync-alt" onclick="resetForm()"></i>
 
     <div id="results"></div>
     <p class="credit">Pallet Calculator by Hopstack</p>
