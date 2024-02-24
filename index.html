@@ -1,81 +1,45 @@
 <!DOCTYPE html>
-<html lang="en" >
-<head>
-  <meta charset="UTF-8">
-  <title> Carton to Pallet Calculator</title>
-  <link rel="stylesheet" href="./style.css">
-
-</head>
-<body>
-<!-- partial:index.partial.html -->
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pallet Calculator by Hopstack - Made by Sneha</title>
+    <title>Pallet Calculator</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-    <h2>Carton to Pallet Calculator</h2>
-    <p>Enter your carton details to calculate how many pallets it will take to fit your cartons.</p>
-    
-    <div class="form-group">
-        <label for="palletConfig">Pallet Configuration:</label>
-        <select id="palletConfig">
-            <option value="singleSKU">1 SKU per pallet</option>
-            <option value="multipleSKU">Multiple SKUs per pallet</option>
-        </select>
+    <div class="container">
+        <h2>Carton to Pallet Calculator</h2>
+        <div id="calculatorForm">
+            <div class="input-group">
+                <label for="cartonLength">Carton Length:</label>
+                <input type="number" id="cartonLength" placeholder="Length in cm" required>
+            </div>
+            <div class="input-group">
+                <label for="cartonWidth">Carton Width:</label>
+                <input type="number" id="cartonWidth" placeholder="Width in cm" required>
+            </div>
+            <div class="input-group">
+                <label for="cartonHeight">Carton Height:</label>
+                <input type="number" id="cartonHeight" placeholder="Height in cm" required>
+            </div>
+            <div class="input-group">
+                <label for="cartonWeight">Carton Weight:</label>
+                <input type="number" id="cartonWeight" placeholder="Weight in kg" required>
+            </div>
+            <div class="input-group">
+                <label for="palletMaxWeight">Pallet Max Weight:</label>
+                <input type="number" id="palletMaxWeight" placeholder="Max Weight in kg" required>
+            </div>
+            <div class="input-group">
+                <label for="palletBaseArea">Pallet Base Area:</label>
+                <input type="number" id="palletBaseArea" placeholder="Area in sq. cm" required>
+            </div>
+            <button onclick="calculate()">Calculate</button>
+            <button id="refreshBtn"><i class="fas fa-sync"></i></button>
+        </div>
+        <div id="results"></div>
     </div>
-
-    <div class="form-group">
-        <label for="weightLimit">Is there a weight limit per Pallet?</label>
-        <select id="weightLimit" onchange="toggleWeightLimitDetails()">
-            <option value="no">No</option>
-            <option value="yes">Yes</option>
-        </select>
-    </div>
-
-    <div id="weightLimitDetails" class="form-group" style="display: none;">
-        <label for="maxWeight">Max Weight per Pallet:</label>
-        <input type="number" id="maxWeight" placeholder="Max Weight">
-        <label for="weightUnit">Weight Unit:</label>
-        <select id="weightUnit">
-            <option value="kg">kg</option>
-            <option value="lbs">lbs</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="numSKUs">Number of unique SKUs:</label>
-        <input type="number" id="numSKUs" placeholder="Number of unique SKUs" oninput="updateSKUDetails()">
-    </div>
-
-    <div id="skuDetails"></div>
-
-    <div class="form-group">
-        <h4>Pallet Base Dimensions (inches)</h4>
-        <label for="palletLength">Length:</label>
-        <input type="number" id="palletLength" placeholder="Length">
-        <label for="palletWidth">Width:</label>
-        <input type="number" id="palletWidth" placeholder="Width">
-        <label for="palletHeight">Max Height:</label>
-        <input type="number" id="palletHeight" placeholder="Max Height">
-    </div>
-
-    <button id="calculateButton" onclick="calculatePallet()">Calculate</button>
-    <button id="resetButton" onclick="resetForm()">Refresh</button>
-
-    <div id="results"></div>
-    <p class="credit">Pallet Calculator by Hopstack</p>
-</div>
-
-<script src="script.js"></script>
-</body>
-</html>
-<!-- partial -->
-  <script  src="./script.js"></script>
-
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
 </body>
 </html>
